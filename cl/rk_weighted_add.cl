@@ -4,7 +4,7 @@
 
 #include "types.cl"
 
-// expected defines: NUM_MATRICES, NUM_SITES
+// expected defines: NUM_MATRICES, NUM_STATES
 
 /**
  * computes the weighted sum:
@@ -37,8 +37,8 @@ __kernel void rk_weighted_add(
 {
 	// sigma matrix id processed by this work item
 	#define sigma_id (get_global_id(1) * get_global_size(0) + get_global_id(0))
-	#define sigma_real(i, j) (2 * (sigma_id * NUM_SITES * NUM_SITES + (i) * NUM_SITES + (j)))
-	#define sigma_imag(i, j) (2 * (sigma_id * NUM_SITES * NUM_SITES + (i) * NUM_SITES + (j)) + 1)
+	#define sigma_real(i, j) (2 * (sigma_id * NUM_STATES * NUM_STATES + (i) * NUM_STATES + (j)))
+	#define sigma_imag(i, j) (2 * (sigma_id * NUM_STATES * NUM_STATES + (i) * NUM_STATES + (j)) + 1)
 
 	// skip padded work-items
 	if (sigma_id >= NUM_MATRICES)
@@ -48,9 +48,9 @@ __kernel void rk_weighted_add(
 	__global const real_t* restrict k[] = { k1, k2, k3, k4, k5, k6, k7 }; // TODO: add more if needed
 
 	// process matrix elements
-	for (int i = 0; i < NUM_SITES; ++i) // row
+	for (int i = 0; i < NUM_STATES; ++i) // row
 	{
-		for (int j = 0; j < NUM_SITES; ++j) // column
+		for (int j = 0; j < NUM_STATES; ++j) // column
 		{
 //			out[sigma_real(i,j)] = y_n[sigma_real(i,j)];
 //			out[sigma_imag(i,j)] = y_n[sigma_imag(i,j)];
