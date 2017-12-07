@@ -36,7 +36,7 @@ int_t get_real_to_text_digits();
 /* boost format instance for printing numbers, to
  * a) have a consistent format, and
  * b) not loose precision
- * use as a copy (to loose constntess), outside of loops (for performance), e.g.
+ * use as a copy (to loose constness), outside of loops (for performance), e.g.
  *
  * auto format = real_format;
  * for (...) out << format % my_number;
