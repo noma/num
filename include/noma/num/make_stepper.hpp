@@ -57,6 +57,32 @@ make_stepper(const num::stepper_type_t& stepper_type, ocl::helper& ocl, const st
 /**
  * Generator function for all stepper types but meta_stepper, which needs a
  * different ctor call.
+ * Covers stepper ctor for argument OpenCL kernel source.
+ */
+template<typename ODE, typename STEPPER>
+typename std::enable_if<!std::is_same<STEPPER, num::meta_stepper>::value, STEPPER>::type // return type is not meta_stepper
+make_stepper(const num::stepper_type_t& stepper_type, ocl::helper& ocl, const std::string& kernel_source, const std::string& kernel_name, const std::string& source_header, const std::string& ocl_compile_options, const ocl::nd_range& range, ODE& ode)
+{
+	// NOTE: stepper type is ignored
+	return STEPPER(ocl, kernel_source, kernel_name, source_header, ocl_compile_options, range, ode);
+}
+
+/**
+ * Generator function for meta_stepper, which needs a stepper_type_t to create
+ * a certain stepper instance at runtime.
+ * Covers stepper ctor for argument OpenCL kernel source.
+ */
+template<typename ODE, typename STEPPER>
+typename std::enable_if<std::is_same<STEPPER, num::meta_stepper>::value, STEPPER>::type // return type is meta_stepper
+make_stepper(const num::stepper_type_t& stepper_type, ocl::helper& ocl, const std::string& kernel_source, const std::string& kernel_name, const std::string& source_header, const std::string& ocl_compile_options, const ocl::nd_range& range, ODE& ode)
+{
+	// NOTE: stepper type is passed
+	return STEPPER(stepper_type, ocl, kernel_source, kernel_name, source_header, ocl_compile_options, range, ode);
+}
+
+/**
+ * Generator function for all stepper types but meta_stepper, which needs a
+ * different ctor call.
  * Covers stepper ctor for file-loaded OpenCL kernel source.
  */
 template<typename ODE, typename STEPPER>

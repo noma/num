@@ -42,6 +42,8 @@ public:
 	static constexpr accumulate_method acc_method = ACC_METHOD;
 
 	rk_stepper(ocl::helper& ocl, const std::string& source_header, const std::string& ocl_compile_options, const ocl::nd_range& range, ODE_T& ode);
+	rk_stepper(ocl::helper& ocl, const std::string& rk_weighted_add_kernel_source, const std::string& rk_weighted_add_kernel_name,
+	           const std::string& source_header, const std::string& ocl_compile_options, const ocl::nd_range& range, ODE_T& ode);
 	rk_stepper(ocl::helper& ocl, const boost::filesystem::path& rk_weighted_add_file_name, const std::string& rk_weighted_add_kernel_name,
 	           const std::string& source_header, const std::string& ocl_compile_options, const ocl::nd_range& range, ODE_T& ode);
 
@@ -82,6 +84,14 @@ const std::string rk_stepper<ODE_T, RKM, ACC_METHOD>::embedded_ocl_kernel_name_ 
 template<typename ODE_T, rk_method_t RKM, accumulate_method ACC_METHOD>
 rk_stepper<ODE_T, RKM, ACC_METHOD>::rk_stepper(ocl::helper& ocl, const std::string& source_header, const std::string& ocl_compile_options, const ocl::nd_range& range, ODE_T& ode)
 	: ocl::kernel_wrapper(ocl, embedded_ocl_source_, embedded_ocl_kernel_name_, source_header, ocl_compile_options, range), b_tab(get_butcher_tableau(RKM)), ode(ode)
+{
+	initialise();
+}
+
+template<typename ODE_T, rk_method_t RKM, accumulate_method ACC_METHOD>
+rk_stepper<ODE_T, RKM, ACC_METHOD>::rk_stepper(ocl::helper& ocl, const std::string& rk_weighted_add_kernel_source, const std::string& rk_weighted_add_kernel_name,
+                                               const std::string& source_header, const std::string& ocl_compile_options, const ocl::nd_range& range, ODE_T& ode)
+	: ocl::kernel_wrapper(ocl, rk_weighted_add_kernel_source, rk_weighted_add_kernel_name, source_header, ocl_compile_options, range), b_tab(get_butcher_tableau(RKM)), ode(ode)
 {
 	initialise();
 }

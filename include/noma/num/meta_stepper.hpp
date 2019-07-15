@@ -28,6 +28,12 @@ public:
 	{ }
 
 	template<typename ODE>
+	meta_stepper(const stepper_type_t& stepper_type, ocl::helper& ocl, const std::string& kernel_source, const std::string& kernel_name,
+	             const std::string& source_header, const std::string& ocl_compile_options, const ocl::nd_range& range, ODE& ode)
+		: poly_stepper_(make_unique_polymorphic_stepper<ODE>(stepper_type, ocl, kernel_source, kernel_name, source_header, ocl_compile_options, range, ode)) // NOTE: all but first are ctor arguments
+	{ }
+
+	template<typename ODE>
 	meta_stepper(const stepper_type_t& stepper_type, ocl::helper& ocl, const boost::filesystem::path& file_name, const std::string& kernel_name,
 	             const std::string& source_header, const std::string& ocl_compile_options, const ocl::nd_range& range, ODE& ode)
 		: poly_stepper_(make_unique_polymorphic_stepper<ODE>(stepper_type, ocl, file_name, kernel_name, source_header, ocl_compile_options, range, ode)) // NOTE: all but first are ctor arguments

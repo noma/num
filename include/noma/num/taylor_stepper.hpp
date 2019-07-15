@@ -40,6 +40,9 @@ public:
 	// to fullfill the same 'concept' as rk_stepper.hpp, even though this stepper does not have its own OpenCL kernel
 	taylor_stepper(ocl::helper& ocl, const std::string& source_header, const std::string& ocl_compile_options, const ocl::nd_range& range, ODE_T& ode)
 		: taylor_stepper(ocl, ode) { };
+	taylor_stepper(ocl::helper& ocl, const std::string& kernel_source, const std::string& kernel_name,
+	               const std::string& source_header, const std::string& ocl_compile_options, const ocl::nd_range& range, ODE_T& ode)
+		: taylor_stepper(ocl, ode) { };
 	taylor_stepper(ocl::helper& ocl, const boost::filesystem::path& file_name, const std::string& kernel_name,
 	               const std::string& source_header, const std::string& ocl_compile_options, const ocl::nd_range& range, ODE_T& ode)
 		: taylor_stepper(ocl, ode) { };

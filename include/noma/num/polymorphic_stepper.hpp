@@ -42,6 +42,11 @@ public:
 		: STEPPER(ocl, source_header, ocl_compile_options, range, ode)
 	{ }
 
+	polymorphic_stepper_adapter(ocl::helper& ocl, const std::string& kernel_source, const std::string& kernel_name,
+	                            const std::string& source_header, const std::string& ocl_compile_options, const ocl::nd_range& range, typename STEPPER::ode_type& ode)
+		: STEPPER(ocl, kernel_source, kernel_name, source_header, ocl_compile_options, range, ode)
+	{ }
+
 	polymorphic_stepper_adapter(ocl::helper& ocl, const boost::filesystem::path& file_name, const std::string& kernel_name,
 	                            const std::string& source_header, const std::string& ocl_compile_options, const ocl::nd_range& range, typename STEPPER::ode_type& ode)
 		: STEPPER(ocl, file_name, kernel_name, source_header, ocl_compile_options, range, ode)
